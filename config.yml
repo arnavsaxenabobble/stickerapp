@@ -1,5 +1,4 @@
 # Application related configurations
-APPLICATION_PORT: 1323
 ENABLE_CORS: true
 # Database related configurations
 DB_TYPE: "postgres"

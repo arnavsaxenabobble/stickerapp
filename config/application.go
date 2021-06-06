@@ -30,14 +30,12 @@ func GetAppConfig() (err error) {
 		}
 	}
 	// Case: Configuration read successfully
-	ApplicationConfig.ApplicationPort = viper.GetInt("APPLICATION_PORT")
 	ApplicationConfig.EnableCORS = viper.GetBool("ENABLE_CORS")
 	return err
 }
 
 // Sets default values of application config
 func setDefault() (err error) {
-	viper.SetDefault("APPLICATION_PORT", 8080)
 	viper.SetDefault("ENABLE_CORS", true)
 	return err
 }

@@ -5,10 +5,10 @@ import (
 	"os"
 
 	c "stickerapp/config"
-	h "stickerapp/http"
-	m "stickerapp/middlewares"
-	r "stickerapp/repository"
-	st "stickerapp/storage"
+	h "stickerapp/sticker/delivery/http"
+	m "stickerapp/sticker/delivery/http/middlewares"
+	r "stickerapp/sticker/repository"
+	st "stickerapp/sticker/storage"
 
 	"github.com/labstack/echo/v4"
 )
@@ -38,20 +38,19 @@ func init() {
 
 // Main Function: Start point of the flow
 func main() {
-	// Start the web application
+	// Start the web application on a random available port
 	port := os.Getenv("PORT")
 	log.Fatal(e.Start(":" + port))
+	// Get database configuration and perform initial migration
 	err := c.GetDatabaseConfig()
-	e.Logger.Debug("Got Database Config")
 	if err != nil {
 		e.Logger.Fatal("Failed to load database configuration %s", err)
 	}
-	e.Logger.Debug("Going for migration")
-	InitialMigration()
+	initialMigration()
 }
 
 // InitialMigration for sticker with db.AutoMigrate
-func InitialMigration() {
+func initialMigration() {
 	db := st.NewDbConn()
 	// Migrate the schema
 	sticker := r.Sticker{}
