@@ -1,0 +1,44 @@
+stages:
+  - test
+  - build
+
+variables:
+  CI_REGISTRY_USER: AWS
+  DOCKER_IMAGE_TAG: 408701597474.dkr.ecr.us-east-2.amazonaws.com/stickerapp:${CI_COMMIT_REF_NAME}
+  GITLAB_DOCKER_IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+
+unit-tests:
+  stage: test
+  image: golang:1.14-buster
+  before_script:
+    - go get -u golang.org/x/lint/golint
+  script:
+    - go get ./...    
+  only:
+    - staging
+    - tags
+
+build:
+  stage: build
+  image: docker:stable
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  before_script:
+    - apt update
+    - apt-get install -y pip
+    - pip install awscli
+    - apt install -y awscli
+    - snap install docker 
+  script:
+    - $(aws ecr get-login --no-include-email --region us-east-2)
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build -t $DOCKER_IMAGE_TAG -t $GITLAB_DOCKER_IMAGE_TAG  .
+    - docker push $DOCKER_IMAGE_TAG
+    - docker push $GITLAB_DOCKER_IMAGE_TAG
+    
+  only:
+    - staging
+    - tags

@@ -1,0 +1,13 @@
+# Application related configurations
+APPLICATION_PORT: 1323
+ENABLE_CORS: true
+# Database related configurations
+DB_TYPE: "postgres"
+DB_USERNAME: "gorm"
+DB_PASSWORD: "gorm"
+DB_NAME: "sticker"
+DB_HOST: "localhost"
+DB_PORT: "5432"
+# Image CDN endpoint
+CDN_URL: "https://ik.imagekit.io/"
+CDN_ID: "vqyy1qe6xh0"
