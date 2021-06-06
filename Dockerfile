@@ -14,7 +14,6 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 COPY . .
-RUN mv config.yml.example config.yml
 RUN make build
 EXPOSE 1323
 CMD [ "./stickers" ]
