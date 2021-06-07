@@ -1,6 +1,8 @@
 package middlewares
 
 import (
+	"stickerapp/config"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/spf13/viper"
@@ -9,6 +11,11 @@ import (
 // Function to register middlewares in echo framework
 // This method will register both readymade middlewares and custom middlewares
 func RegisterMiddleware(e *echo.Echo) {
+	// Read application configuration from configuration file
+	err := config.GetAppConfig()
+	if err != nil {
+		panic(err)
+	}
 	// Middleware for logging
 	e.Use(middleware.Logger())
 	// Middleware for recovery handling
